@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clock</title>
+    <link rel="stylesheet" href="style.css" />
+
+    <script>
+      var glbHours = 12;
+      var glbMinutes = 12;
+      function newTime() {
+        // const nwTm = Math.floor(Math.random() * 12 * 24);
+        // const nwTmMin = (nwTm % 12) * 5;
+        // const nwTmHour = Math.floor(nwTm / 12);
+        const nwTm = Math.floor(Math.random() * 60 * 24);
+        const nwTmMin = nwTm % 60;
+        const nwTmHour = Math.floor(nwTm / 60);
+
+        const txtim = document.getElementById("tx-time");
+        txtim.innerText = `${nwTmHour}:` + (nwTmMin < 10 ? "0" : "") + nwTmMin;
+        // showTextTime(nwTmHour, nwTmMin);
+
+        const hourHand = document.getElementById("hour-hand");
+        const minHand = document.getElementById("min-hand");
+
+        hourHand.style.transform = `rotate(${
+          ((nwTmHour % 12) + nwTmMin / 60) / 12
+        }turn)`;
+        minHand.style.transform = `rotate(${nwTmMin / 60}turn)`;
+
+        glbHours = nwTmHour;
+        glbMinutes = nwTmMin;
+      }
+
+      function showTextTime(hours, minutes) {
+        const txtim = document.getElementById("tx-time");
+
+        txtim.innerText =
+          minTx(minutes) + hourTx(hours + (minutes > 20 ? 1 : 0));
+      }
+
+      function minTx(m) {
+        let t;
+
+        if (m == 0) {
+          t = "";
+        } else if (m <= 20) {
+          t = minTx20(m) + (m == 0 ? "" : minute(m)) + " över ";
+        } else if (m < 30) {
+          t = minTx20(30 - m) + minute(m) + " i halv ";
+        } else if (m == 30) {
+          t = "halv ";
+        } else if (m < 40) {
+          t = minTx20(m - 30) + minute(m) + " över halv ";
+        } else {
+          t = minTx20(60 - m) + minute(m) + " i ";
+        }
+
+        return t;
+      }
+
+      function minute(m) {
+        return m % 5 == 0 ? "" : m == 1 ? " minut" : " minuter";
+      }
+
+      function minTx20(m) {
+        let t;
+        switch (m) {
+          case 0:
+            t = "";
+            break;
+          case 1:
+            t = "en";
+            break;
+          case 2:
+            t = "två";
+            break;
+          case 3:
+            t = "tre";
+            break;
+          case 4:
+            t = "fyra";
+            break;
+          case 5:
+            t = "fem";
+            break;
+          case 6:
+            t = "sex";
+            break;
+          case 7:
+            t = "sju";
+            break;
+          case 8:
+            t = "åtta";
+            break;
+          case 9:
+            t = "nio";
+            break;
+          case 10:
+            t = "tio";
+            break;
+          case 11:
+            t = "elva";
+            break;
+          case 12:
+            t = "tolv";
+            break;
+          case 13:
+            t = "tretton";
+            break;
+          case 14:
+            t = "fjorton";
+            break;
+          case 15:
+            t = "kvart";
+            break;
+          case 16:
+            t = "sexton";
+            break;
+          case 17:
+            t = "sjutton";
+            break;
+          case 18:
+            t = "arton";
+            break;
+          case 19:
+            t = "nitton";
+            break;
+          case 20:
+            t = "tjugo";
+            break;
+          default:
+            t = "" + m;
+        }
+        return t;
+      }
+
+      function hourTx(h) {
+        let t;
+        switch (h % 12) {
+          case 0:
+            t = "tolv";
+            break;
+          case 1:
+            t = "ett";
+            break;
+          default:
+            t = minTx20(h);
+            break;
+        }
+        return t;
+      }
+    </script>
+  </head>
+  <body>
+    <main>
+      <div onclick="newTime();" class="clock">
+        <img src="assets/face-nonumbers.svg" alt="" />
+        <img id="hour-hand" src="assets/hand-hours.svg" alt="" />
+        <img id="min-hand" src="assets/hand-minutes.svg" alt="" />
+      </div>
+      <p>Klockan är <b id="tx-time">tolv minuter över tolv</b></p>
+      <button onclick="showTextTime((glbHours % 12), glbMinutes);">
+        Visa tiden i text
+      </button>
+    </main>
+  </body>
+</html>
