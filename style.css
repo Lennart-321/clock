@@ -15,7 +15,7 @@ main {
 }
 
 .clock {
-  --size: 512px;
+  --size: 600px;
 
   position: relative;
 
@@ -25,6 +25,7 @@ main {
   height: var(--size);
 
   /* background-color: rgb(231, 174, 18); */
+  /* background-color: aquamarine; */
 }
 .clock > img {
   position: absolute;
