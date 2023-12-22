@@ -34,7 +34,8 @@
         glbMinutes = nwTmMin;
         glbTime = nwTm;
 
-        updateClock();
+        // updateClock();
+        renderClock();
       }
 
       function showTextTime(hours, minutes) {
@@ -69,75 +70,100 @@
       }
 
       function minTx20(m) {
-        let t;
-        switch (m) {
-          case 0:
-            t = "";
-            break;
-          case 1:
-            t = "en";
-            break;
-          case 2:
-            t = "två";
-            break;
-          case 3:
-            t = "tre";
-            break;
-          case 4:
-            t = "fyra";
-            break;
-          case 5:
-            t = "fem";
-            break;
-          case 6:
-            t = "sex";
-            break;
-          case 7:
-            t = "sju";
-            break;
-          case 8:
-            t = "åtta";
-            break;
-          case 9:
-            t = "nio";
-            break;
-          case 10:
-            t = "tio";
-            break;
-          case 11:
-            t = "elva";
-            break;
-          case 12:
-            t = "tolv";
-            break;
-          case 13:
-            t = "tretton";
-            break;
-          case 14:
-            t = "fjorton";
-            break;
-          case 15:
-            t = "kvart";
-            break;
-          case 16:
-            t = "sexton";
-            break;
-          case 17:
-            t = "sjutton";
-            break;
-          case 18:
-            t = "arton";
-            break;
-          case 19:
-            t = "nitton";
-            break;
-          case 20:
-            t = "tjugo";
-            break;
-          default:
-            t = "" + m;
-        }
-        return t;
+        const minuteNames = [
+          "",
+          "en",
+          "två",
+          "tre",
+          "fyra",
+          "fem",
+          "sex",
+          "sju",
+          "åtta",
+          "nio",
+          "tio",
+          "elva",
+          "tolv",
+          "tretton",
+          "fjorton",
+          "kvart",
+          "sexton",
+          "sjutton",
+          "arton",
+          "nitton",
+          "tjugo",
+        ];
+        return 0 <= m && m < minuteNames.length ? minuteNames[m] : `${m}`;
+
+        // let t ;
+        // switch (m) {
+        //   case 0:
+        //     t = "";
+        //     break;
+        //   case 1:
+        //     t = "en";
+        //     break;
+        //   case 2:
+        //     t = "två";
+        //     break;
+        //   case 3:
+        //     t = "tre";
+        //     break;
+        //   case 4:
+        //     t = "fyra";
+        //     break;
+        //   case 5:
+        //     t = "fem";
+        //     break;
+        //   case 6:
+        //     t = "sex";
+        //     break;
+        //   case 7:
+        //     t = "sju";
+        //     break;
+        //   case 8:
+        //     t = "åtta";
+        //     break;
+        //   case 9:
+        //     t = "nio";
+        //     break;
+        //   case 10:
+        //     t = "tio";
+        //     break;
+        //   case 11:
+        //     t = "elva";
+        //     break;
+        //   case 12:
+        //     t = "tolv";
+        //     break;
+        //   case 13:
+        //     t = "tretton";
+        //     break;
+        //   case 14:
+        //     t = "fjorton";
+        //     break;
+        //   case 15:
+        //     t = "kvart";
+        //     break;
+        //   case 16:
+        //     t = "sexton";
+        //     break;
+        //   case 17:
+        //     t = "sjutton";
+        //     break;
+        //   case 18:
+        //     t = "arton";
+        //     break;
+        //   case 19:
+        //     t = "nitton";
+        //     break;
+        //   case 20:
+        //     t = "tjugo";
+        //     break;
+        //   default:
+        //     t = "" + m;
+        // }
+        // return t;
       }
 
       function hourTx(h) {
@@ -177,10 +203,12 @@
       function renderHands(ctx) {
         let mOf12h = glbTime % (12 * 60);
 
-        ctx.fillStyle = "#eeeeee";
-        ctx.beginPath();
-        ctx.ellipse(300, 300, 260, 260, 0, 0, 2 * Math.PI);
-        ctx.fill();
+        if (false) {
+          ctx.fillStyle = "#eeeeee";
+          ctx.beginPath();
+          ctx.ellipse(300, 300, 220, 220, 0, 0, 2 * Math.PI);
+          ctx.fill();
+        }
 
         hHandPos = mOf12h / (12 * 60);
         mHandPos = (mOf12h % 60) / 60;
@@ -195,8 +223,9 @@
         ctx.rotate(hHandPos * 2 * Math.PI);
 
         ctx.moveTo(12, 0);
-        ctx.lineTo(1, -200);
-        ctx.lineTo(-1, -200);
+        ctx.lineTo(2, -180);
+        ctx.lineTo(0, -181);
+        ctx.lineTo(-2, -180);
         ctx.lineTo(-12, 0);
         ctx.closePath();
         ctx.fill();
@@ -212,7 +241,8 @@
         ctx.rotate(mHandPos * 2 * Math.PI);
 
         ctx.moveTo(7, 0);
-        ctx.lineTo(0, -255);
+        ctx.lineTo(1, -220);
+        ctx.lineTo(-1, -220);
         ctx.lineTo(-7, 0);
         ctx.closePath();
         ctx.fill();
@@ -221,24 +251,70 @@
 
       function renderFace(ctx) {
         ctx.fillStyle = "#eeeeee";
+        ctx.font = "bold 40px serif";
         ctx.beginPath();
         ctx.ellipse(300, 300, 300, 300, 0, 0, 2 * Math.PI);
         ctx.fill();
 
         ctx.lineWidth = 3;
+        ctx.fillStyle = "#000";
 
         ctx.save();
         ctx.translate(300, 300);
         ctx.beginPath();
         ctx.strokeStyle = "black";
         for (let i = 0; i < 60; i++, ctx.rotate(Math.PI / 30)) {
-          ctx.moveTo(0, -300);
-          ctx.lineTo(0, i % 5 == 0 ? -263 : -280);
-          ctx.lineWidth = 5;
+          ctx.moveTo(0, -296);
+          // ctx.lineTo(0, i % 5 == 0 ? -263 : -280);
+          ctx.lineTo(0, -280);
+
+          // ctx.lineWidth = 5;
+          // if (i % 5 == 0) {
+          //   const tx = `${i == 0 ? 12 : i / 5}`;
+          //   let txDim = ctx.measureText(tx);
+          //   ctx.save();
+          //   ctx.rotate((-i * Math.PI) / 30);
+          //   ctx.fillText(tx, -txDim.width / 2, -225);
+          //   ctx.restore();
+          // }
         }
-        ctx.restore();
+        ctx.stroke();
+
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        for (let i = 0; i < 60; i++, ctx.rotate(Math.PI / 6)) {
+          ctx.moveTo(0, -296);
+          ctx.lineTo(0, -270);
+        }
 
         ctx.stroke();
+
+        // beginPath();
+        let clockTx = [
+          "III",
+          "II",
+          "I",
+          "XII",
+          "XI",
+          "X",
+          "IX",
+          "VIII",
+          "VII",
+          "VI",
+          "V",
+          "IV",
+        ];
+        let step = Math.PI / 6;
+        let angle = 0;
+        for (let i = 0; i < 12; i++, angle += step) {
+          x = 238 * Math.cos(angle);
+          let sin = Math.sin(angle);
+          y = -238 * sin + 13 /*lower baseline*/ + -10 * sin;
+          let txDim = ctx.measureText(clockTx[i]);
+          ctx.fillText(clockTx[i], x - txDim.width / 2, y);
+        }
+        // ctx.fill();
+        ctx.restore();
       }
     </script>
   </head>
